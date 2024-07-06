@@ -1,40 +1,34 @@
 ﻿using Discord;
 using Discord.WebSocket;
 
-namespace WheelchairBot
+namespace WheelchairBot;
+
+public class Program
 {
-    public class Program
+    private static DiscordSocketClient client = new(new()
     {
-        private static DiscordSocketClient client;
+        GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
+    });
 
-        public static async Task Main(string[] args)
-        {
-            client = new(new() 
-            { 
-                GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent 
-            });
+    private static CommandHandler commandHandler = new(client);
 
-            client.Log += Log;
+    public static async Task Main(string[] args)
+    {
+        client.Log += Log;
 
-            client.MessageReceived += OnMessageRecieved;
+        commandHandler.SetupCommandsAsync();
 
-            await client.LoginAsync(TokenType.Bot, File.ReadAllText("TOKEN"));
-            await client.StartAsync();
+        await client.LoginAsync(TokenType.Bot, File.ReadAllText("TOKEN"));
+        await client.StartAsync();
 
-            await client.SetStatusAsync(UserStatus.DoNotDisturb);
+        await client.SetStatusAsync(UserStatus.DoNotDisturb);
 
-            await Task.Delay(-1);
-        }
+        await Task.Delay(-1);
+    }
 
-        private static Task Log(LogMessage msg)
-        {
-            Console.WriteLine(msg);
-            return Task.CompletedTask;
-        }
-
-        private static async Task OnMessageRecieved(SocketMessage msg)
-        {
-            Console.WriteLine($"{msg.Author.Username}: {msg.Content}");
-        }
+    private static Task Log(LogMessage msg)
+    {
+        Console.WriteLine(msg);
+        return Task.CompletedTask;
     }
 }
