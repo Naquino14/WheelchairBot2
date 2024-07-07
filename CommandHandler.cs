@@ -1,5 +1,6 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace WheelchairBot;
@@ -20,8 +21,8 @@ public partial class CommandHandler(DiscordSocketClient client)
     {
         client.MessageReceived += HandleCommandsAsync;
 
-        RegisterCommand(Commands.Say, nameof(Commands.Say));
-        RegisterCommand(Commands.Say2, nameof(Commands.Say2));
+        foreach (var method in typeof(Commands).GetMethods(BindingFlags.Public | BindingFlags.Static))
+            RegisterCommand(method.CreateDelegate<Func<CommandContext, string[], Task>>(), method.Name.ToLower());
     }
 
     private async Task HandleCommandsAsync(SocketMessage messageParam)
