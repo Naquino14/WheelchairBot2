@@ -13,9 +13,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="sound binaries\libopus.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sound binaries\libsodium.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TOKEN">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="sound binaries\" />
   </ItemGroup>
 
 </Project>
