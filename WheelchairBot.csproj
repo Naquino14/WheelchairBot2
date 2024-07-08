@@ -13,11 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="sound binaries\libopus.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="sound binaries\opus.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="sound binaries\libsodium.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="TOKEN">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -25,7 +25,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="sound binaries\" />
+    <Compile Update="Responses.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Responses.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Responses.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Responses.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="mkdir &quot;$(SolutionDir)bin\Debug\net8.0&quot;&#xD;&#xA;xcopy &quot;$(SolutionDir)sound binaries\*.*&quot; &quot;$(SolutionDir)bin\Debug\net8.0&quot; /y /d&#xD;&#xA;&#xD;&#xA;" />
+  </Target>
 
 </Project>
