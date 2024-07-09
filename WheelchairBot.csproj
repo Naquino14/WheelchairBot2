@@ -13,6 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="assets\fart.mp3">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
     <None Update="sound binaries\opus.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
@@ -39,8 +42,12 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="assets\" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="mkdir &quot;$(SolutionDir)bin\Debug\net8.0&quot;&#xD;&#xA;xcopy &quot;$(SolutionDir)sound binaries\*.*&quot; &quot;$(SolutionDir)bin\Debug\net8.0&quot; /y /d&#xD;&#xA;&#xD;&#xA;" />
+    <Exec Command="mkdir &quot;$(SolutionDir)bin\Debug\net8.0&quot;&#xD;&#xA;xcopy &quot;$(SolutionDir)sound binaries\*.*&quot; &quot;$(SolutionDir)bin\Debug\net8.0&quot; /y /d&#xD;&#xA;xcopy &quot;$(SolutionDir)assets\*.*&quot; &quot;$(SolutionDir)bin\Debug\net8.0&quot; /y /d&#xD;&#xA;" />
   </Target>
 
 </Project>

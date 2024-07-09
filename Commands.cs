@@ -89,6 +89,13 @@ public static class Commands
         await context.Channel.SendMessageAsync(Responses.leave_LeftGif);
     }
 
+    public static async Task Fart(CommandContext context, string[] args)
+    {
+        await AudioHelper.SendAudioStreamAsync(audioClients[context.Guild.Id].AudioClient, "fart.mp3");
+    }
+
+    #region Private Helpers
+
     private static async Task<bool> ConnectToChannel(CommandContext context, IVoiceChannel channel)
     {
         // spawn new thread to connect
@@ -122,4 +129,6 @@ public static class Commands
         }
         return true;
     }
+
+    #endregion
 }

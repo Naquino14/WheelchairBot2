@@ -18,7 +18,7 @@ public class Program
 
         commandHandler.SetupCommandsAsync();
 
-        await client.LoginAsync(TokenType.Bot, File.ReadAllText("TOKEN"));
+        await client.LoginAsync(TokenType.Bot, File.ReadAllText("DC_TOKEN"));
         await client.StartAsync();
 
         await client.SetStatusAsync(UserStatus.DoNotDisturb);
