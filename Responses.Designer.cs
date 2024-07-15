@@ -178,6 +178,15 @@ namespace WheelchairBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You guys didnt invite me to the clam??, what lousy friends.
+        /// </summary>
+        internal static string play_NoContext {
+            get {
+                return ResourceManager.GetString("play_NoContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not find results for {0}.
         /// </summary>
         internal static string play_SearchEmpty {
@@ -192,6 +201,15 @@ namespace WheelchairBot {
         internal static string play_Timeout {
             get {
                 return ResourceManager.GetString("play_Timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hey pal, get in {0} before queueing something up.
+        /// </summary>
+        internal static string play_UserNotInChannel {
+            get {
+                return ResourceManager.GetString("play_UserNotInChannel", resourceCulture);
             }
         }
         

@@ -156,11 +156,17 @@
   <data name="nowplaying_NotInChannel" xml:space="preserve">
     <value>Nothing is playing right now but you can change that, connect me to a channel and start the party!</value>
   </data>
+  <data name="play_NoContext" xml:space="preserve">
+    <value>You guys didnt invite me to the clam??, what lousy friends</value>
+  </data>
   <data name="play_SearchEmpty" xml:space="preserve">
     <value>Could not find results for {0}</value>
   </data>
   <data name="play_Timeout" xml:space="preserve">
     <value>Downloader thread has timed out, start panicking</value>
+  </data>
+  <data name="play_UserNotInChannel" xml:space="preserve">
+    <value>Hey pal, get in {0} before queueing something up</value>
   </data>
   <data name="queue_Empty" xml:space="preserve">
     <value>The queue is empty dumbass</value>

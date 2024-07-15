@@ -40,7 +40,7 @@ internal static class MusicFetchHelper
         var process = Process.Start(new ProcessStartInfo
         {
             FileName = "yt-dlp",
-            Arguments = $"-x -f bestaudio --audio-format m4a -o \"{destination}\\%(title)s.%(ext)s\" {url}",
+            Arguments = $"-x --no-mtime -f bestaudio --audio-format m4a -o \"{destination}\\%(title)s.%(ext)s\" {url}",
             CreateNoWindow = true,
             UseShellExecute = false,
             RedirectStandardOutput = true,
@@ -59,7 +59,7 @@ internal static class MusicFetchHelper
         for (int i = 0; i < downloadedVideos.Length; i++)
             if (File.GetCreationTime(downloadedVideos[i]) > latest)
             {
-                latest = File.GetCreationTime($@"{destination}\{downloadedVideos[i]}");
+                latest = File.GetLastWriteTime(downloadedVideos[i]);
                 latestIndex = i;
             }
 

@@ -63,7 +63,7 @@ public static class Commands
             await context.Message.ReplyAsync(Responses.nowplaying_None);
             return;
         }
-        await context.Message.ReplyAsync($"Now playing: {audioClient.NowPlaying.Name}");
+        await context.Message.ReplyAsync($"Now playing: {audioClient.NowPlaying.Name}\nhttps://youtube.com/watch?v={audioClient.NowPlaying.ID}");
     }
 
     public static async Task Remove(CommandContext context, string[] args)
@@ -183,6 +183,10 @@ public static class Commands
         if (!await DisconnectFromChannel(context, channel))
             return;
 
+        // delete all songs in queue directory
+        if (Directory.Exists($@"queue\{context.Guild.Id}"))
+            Directory.Delete($@"queue\{context.Guild.Id}", true);
+
         await context.Channel.SendMessageAsync(Responses.leave_Left);
         await context.Channel.SendMessageAsync(Responses.leave_LeftGif);
     }
@@ -222,7 +226,23 @@ public static class Commands
                 break;
         }
 
+        // check if context exists
+        if (!audioClients.ContainsKey(context.Guild.Id))
+        {
+            await context.Message.ReplyAsync(Responses.remove_NoContext);
+            return;
+        }
+
         var guildAudioContext = audioClients[context.Guild.Id];
+        // check if user is in channel
+        var channel = (context.User as IGuildUser)?.VoiceChannel;
+
+        // check if user is in channel
+        if (channel is null)
+        {
+            await context.Message.ReplyAsync(string.Format(Responses.play_UserNotInChannel, guildAudioContext.ConnectedChannel.Name));
+            return;
+        }
 
         using (context.Channel.EnterTypingState())
         {
