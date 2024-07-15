@@ -1,14 +1,21 @@
 ﻿using Discord;
 using Discord.Commands;
+using System.Text.RegularExpressions;
 
 namespace WheelchairBot;
 
 public static class Commands
 {
-    private static Dictionary<ulong, GuildAudioContext> audioClients = [];
+    private static readonly Dictionary<ulong, GuildAudioContext> audioClients = [];
 
     private static readonly ulong JOE_ID = 879175038874554379ul;
     private static readonly int JOIN_LEAVE_TIMEOUT_MS = 8000;
+    private static readonly int DOWNLOAD_TIMEOUT_MS = 10000;
+
+    private static SoundDispatcher SoundDispatcher { get; set; }
+
+    static Commands()
+        => SoundDispatcher = new(audioClients);
 
     public static async Task Say(CommandContext context, string[] args)
     {
@@ -57,6 +64,10 @@ public static class Commands
         if (!await ConnectToChannel(context, channel))
             return;
 
+        // delete all songs in queue directory
+        if (Directory.Exists($@"queue\{context.Guild.Id}"))
+            Directory.Delete($@"queue\{context.Guild.Id}", true);
+
         await context.Message.ReplyAsync(string.Format(Responses.join_JoinSuccess, channel.Name));
     }
 
@@ -91,7 +102,60 @@ public static class Commands
 
     public static async Task Fart(CommandContext context, string[] args)
     {
-        await AudioHelper.SendAudioStreamAsync(audioClients[context.Guild.Id].AudioClient, "fart.mp3");
+        AudioHelper.SendAudioStream(audioClients[context.Guild.Id].AudioClient, "fart.mp3", audioClients[context.Guild.Id]);
+        await context.Message.DeleteAsync();
+    }
+
+    private enum ParamType
+    {
+        query, 
+        link
+    }
+
+    public static async Task Play(CommandContext context, string[] args)
+    {
+        var combinedArgs = string.Join(" ", args.Skip(1));
+        var paramType = Regex.Match(combinedArgs, @"^(https:\/\/)?((www|music).)?youtube.com\/watch\?v=\w+(&list=\w+)?[^ ]$").Success ? ParamType.link : ParamType.query;
+        string? videoID = null;
+        string? videoName = null;
+        
+        switch (paramType)
+        {
+            case ParamType.query:
+                var result = await MusicFetchHelper.Search(combinedArgs);
+                /// TODO: for now only use the top result
+                videoName = result[0].name;
+                videoID = result[0].id;
+                break;
+            case ParamType.link:
+                // extract video id
+                videoID = Regex.Match(combinedArgs, @"\?v=\w+").Value[3..];
+                break;
+        }
+
+        var guildAudioContext = audioClients[context.Guild.Id];
+
+        using (context.Channel.EnterTypingState())
+        {
+            await context.Message.ReplyAsync("Downloading song, please wait...");
+
+            await MusicFetchHelper.DownloadSong(videoID!, guildAudioContext);
+            var videoInfo = guildAudioContext.Queue.Last();
+            videoName = videoInfo.Name;
+        }
+
+        await context.Channel.SendMessageAsync($"Added {videoName} to position {guildAudioContext.Queue.Count}");
+
+        if (!guildAudioContext.IsReady)
+            guildAudioContext.IsReady = true;
+
+        //if (guildAudioContext.Queue.Count == 0)
+        //{
+        //    var firstSong = guildAudioContext.Queue.First();
+        //    guildAudioContext.Queue.RemoveAt(0);
+        //    await context.Channel.SendMessageAsync($"Now playing: {firstSong.Name}");
+        //    AudioHelper.SendAudioStream(guildAudioContext.AudioClient, @$"queue\{guildAudioContext.GuildId}\{firstSong.ID}.m4a", guildAudioContext);
+        //}
     }
 
     #region Private Helpers

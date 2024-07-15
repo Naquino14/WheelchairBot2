@@ -150,4 +150,7 @@
   <data name="leave_UserNotInChannel" xml:space="preserve">
     <value>stop being a party pooper, you arent even listening to my music</value>
   </data>
+  <data name="play_Timeout" xml:space="preserve">
+    <value>Downloader thread has timed out, start panicking</value>
+  </data>
 </root>

@@ -158,5 +158,14 @@ namespace WheelchairBot {
                 return ResourceManager.GetString("leave_UserNotInChannel", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloader thread has timed out, start panicking.
+        /// </summary>
+        internal static string play_Timeout {
+            get {
+                return ResourceManager.GetString("play_Timeout", resourceCulture);
+            }
+        }
     }
 }

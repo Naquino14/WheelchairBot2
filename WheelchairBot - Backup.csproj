@@ -11,7 +11,6 @@
     <PackageReference Include="Discord.Net" Version="3.15.2" />
     <PackageReference Include="Discord.Net.WebSocket" Version="3.15.2" />
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.68.0.3421" />
-    <PackageReference Include="MediaInfo.DotNetWrapper" Version="1.0.7" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,10 +23,7 @@
     <None Update="sound binaries\libsodium.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="DC_TOKEN">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="YT_TOKEN">
+    <None Update="TOKEN">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using Discord.Audio;
+using MediaInfo.DotNetWrapper.Enumerations;
 using System.Diagnostics;
 
 namespace WheelchairBot;
@@ -13,18 +14,43 @@ internal class AudioHelper
         RedirectStandardOutput = true
     });
 
-    internal static async Task SendAudioStreamAsync(IAudioClient client, string path)
+    internal static void SendAudioStream(IAudioClient client, string path, GuildAudioContext audioContext)
     {
-        using var ffmpeg = CreateAudioProcess(path);
-        using var output = (ffmpeg ?? throw new NullReferenceException("Could not spawn ffmpeg process")).StandardOutput.BaseStream;
-        using var discord = client.CreatePCMStream(AudioApplication.Mixed);
-        try
+        // create new thread
+        audioContext.StreamingThread = new Thread(async () => {
+            int duration = GetDuration(path) + 1;
+            using var ffmpeg = CreateAudioProcess(path);
+            using var output = (ffmpeg ?? throw new NullReferenceException("Could not spawn ffmpeg process")).StandardOutput.BaseStream;
+            using var discord = client.CreatePCMStream(AudioApplication.Mixed);
+            try
+            {
+                audioContext.IsPlaying = true;
+                await output.CopyToAsync(discord);
+
+                // wait for song duration
+                await Task.Delay(duration);
+                audioContext.IsPlaying = false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Exception occured when sending audio stream to discord: {e.Message}");
+            }
+        });
+        audioContext.StreamingThread.Start();
+    }
+
+    private static int GetDuration(string path)
+    {
+        using var mediaInfo = new MediaInfo.DotNetWrapper.MediaInfo();
+        mediaInfo.Open(path);
+
+        string durationStr = mediaInfo.Get(StreamKind.Audio, 0, "Duration");
+        // Convert duration to double (in milliseconds)
+        if (double.TryParse(durationStr, out double durationMs))
         {
-            await output.CopyToAsync(discord);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Exception occured when sending audio stream to discord: {e.Message}");
-        }
+            // Convert ms to s
+            return (int)(durationMs / 1000.0);
+        } else
+            throw new Exception("Failed to retrieve duration.");
     }
 }
