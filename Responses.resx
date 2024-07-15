@@ -150,7 +150,34 @@
   <data name="leave_UserNotInChannel" xml:space="preserve">
     <value>stop being a party pooper, you arent even listening to my music</value>
   </data>
+  <data name="nowplaying_None" xml:space="preserve">
+    <value>Nothing is playing right now, start the party!</value>
+  </data>
+  <data name="nowplaying_NotInChannel" xml:space="preserve">
+    <value>Nothing is playing right now but you can change that, connect me to a channel and start the party!</value>
+  </data>
+  <data name="play_SearchEmpty" xml:space="preserve">
+    <value>Could not find results for {0}</value>
+  </data>
   <data name="play_Timeout" xml:space="preserve">
     <value>Downloader thread has timed out, start panicking</value>
+  </data>
+  <data name="queue_Empty" xml:space="preserve">
+    <value>The queue is empty dumbass</value>
+  </data>
+  <data name="queue_NotInChannel" xml:space="preserve">
+    <value>The queue is empty, lets get this party started! Say `j!join` while in a voice channel.</value>
+  </data>
+  <data name="remove_BadArg" xml:space="preserve">
+    <value>remove what????</value>
+  </data>
+  <data name="remove_EmptyQueue" xml:space="preserve">
+    <value>yeah hold on let me just, remove something from an empty queue</value>
+  </data>
+  <data name="remove_NoContext" xml:space="preserve">
+    <value>BRO IM NOT EVEN IN A CHANNEL</value>
+  </data>
+  <data name="remove_UserNotInChannel" xml:space="preserve">
+    <value>PARTY POOPER ALERT</value>
   </data>
 </root>

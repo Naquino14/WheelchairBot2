@@ -13,6 +13,7 @@ internal class GuildAudioContext
             IMessageChannel? textChannel = null, 
             Thread? streamingThread = null, 
             List<VideoInfo> queue = null!, 
+            VideoInfo? nowPlaying = null,
             bool isConnected = false, bool 
             isPlaying = false, 
             bool isReady = false
@@ -23,6 +24,7 @@ internal class GuildAudioContext
         ConnectedChannel = connectedChannel;
         StreamingThread = streamingThread;
         Queue = queue ?? [];
+        NowPlaying = nowPlaying;
         IsConnected = isConnected;
         IsPlaying = isPlaying;
     }
@@ -34,6 +36,7 @@ internal class GuildAudioContext
     internal IMessageChannel? ContextTextChannel { get; set; }
     internal Thread? StreamingThread { get; set; }
     internal List<VideoInfo> Queue { get; set; }
+    internal VideoInfo? NowPlaying { get; set; }
     internal bool IsConnected { get; set; }
     internal bool IsPlaying { get; set; }
     internal bool IsReady { get; set; }

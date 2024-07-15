@@ -160,11 +160,92 @@ namespace WheelchairBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nothing is playing right now, start the party!.
+        /// </summary>
+        internal static string nowplaying_None {
+            get {
+                return ResourceManager.GetString("nowplaying_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing is playing right now but you can change that, connect me to a channel and start the party!.
+        /// </summary>
+        internal static string nowplaying_NotInChannel {
+            get {
+                return ResourceManager.GetString("nowplaying_NotInChannel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find results for {0}.
+        /// </summary>
+        internal static string play_SearchEmpty {
+            get {
+                return ResourceManager.GetString("play_SearchEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Downloader thread has timed out, start panicking.
         /// </summary>
         internal static string play_Timeout {
             get {
                 return ResourceManager.GetString("play_Timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The queue is empty dumbass.
+        /// </summary>
+        internal static string queue_Empty {
+            get {
+                return ResourceManager.GetString("queue_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The queue is empty, lets get this party started! Say `j!join` while in a voice channel..
+        /// </summary>
+        internal static string queue_NotInChannel {
+            get {
+                return ResourceManager.GetString("queue_NotInChannel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to remove what????.
+        /// </summary>
+        internal static string remove_BadArg {
+            get {
+                return ResourceManager.GetString("remove_BadArg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to yeah hold on let me just, remove something from an empty queue.
+        /// </summary>
+        internal static string remove_EmptyQueue {
+            get {
+                return ResourceManager.GetString("remove_EmptyQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BRO IM NOT EVEN IN A CHANNEL.
+        /// </summary>
+        internal static string remove_NoContext {
+            get {
+                return ResourceManager.GetString("remove_NoContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PARTY POOPER ALERT.
+        /// </summary>
+        internal static string remove_UserNotInChannel {
+            get {
+                return ResourceManager.GetString("remove_UserNotInChannel", resourceCulture);
             }
         }
     }

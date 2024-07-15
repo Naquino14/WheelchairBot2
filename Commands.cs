@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using System;
 using System.Text.RegularExpressions;
 
 namespace WheelchairBot;
@@ -28,6 +29,92 @@ public static class Commands
         await context.Message.DeleteAsync();
         await context.Channel.SendMessageAsync(string.Join(" ", args.Skip(1)));
     };
+
+    public static async Task Queue(CommandContext context, string[] args)
+    {
+        string queue = "";
+        if (!audioClients.ContainsKey(context.Guild.Id))
+        {
+            await context.Message.ReplyAsync(Responses.queue_NotInChannel);
+            return;
+        }
+        var audioClient = audioClients[context.Guild.Id];
+        if (audioClient.Queue.Count == 0)
+        {
+            await context.Message.ReplyAsync(Responses.queue_Empty);
+            return;
+        }
+
+        for (int i = 0; i < audioClient.Queue.Count; i++)
+            queue += $"{i + 1:00}: {audioClient.Queue[i].Name}\n";
+        await context.Message.ReplyAsync(queue);
+    }
+
+    public static async Task NowPlaying(CommandContext context, string[] args)
+    {
+        if (!audioClients.ContainsKey(context.Guild.Id))
+        {
+            await context.Message.ReplyAsync(Responses.nowplaying_NotInChannel);
+            return;
+        }
+        var audioClient = audioClients[context.Guild.Id];
+        if (audioClient.NowPlaying is null)
+        {
+            await context.Message.ReplyAsync(Responses.nowplaying_None);
+            return;
+        }
+        await context.Message.ReplyAsync($"Now playing: {audioClient.NowPlaying.Name}");
+    }
+
+    public static async Task Remove(CommandContext context, string[] args)
+    {
+        if (args.Length != 2 || !int.TryParse(args[1], out int index) || index <= 0)
+        {
+            await context.Message.ReplyAsync(Responses.remove_BadArg);
+            return;
+        }
+        index--;
+
+        // check if context exists
+        if (!audioClients.ContainsKey(context.Guild.Id))
+        {
+            await context.Message.ReplyAsync(Responses.remove_NoContext);
+            return;
+        }
+        var audioClient = audioClients[context.Guild.Id];
+        // check if user is in channel
+        var channel = (context.User as IGuildUser)?.VoiceChannel;
+
+        // check if user is in channel
+        if (channel is null)
+        {
+            await context.Message.ReplyAsync(Responses.remove_UserNotInChannel);
+            return;
+        }
+
+        // check if queue is empty
+        if (audioClient.Queue.Count == 0)
+        {
+            await context.Message.ReplyAsync(Responses.remove_EmptyQueue);
+            return;
+        }
+
+        // get song to remove
+        if (audioClient.Queue.Count < index)
+        {
+            await context.Message.ReplyAsync(Responses.remove_BadArg);
+            return;
+        }
+
+        // remove song
+        var removedSong = audioClient.Queue[index];
+        audioClient.Queue.RemoveAt(index);
+
+        await context.Message.ReplyAsync($"Removed {removedSong.Name} at position {index} from queue.");
+
+        if (audioClient.Queue.Count == 0)
+            audioClient.IsReady = false; // set is ready false for dispatch
+    }
 
     public static async Task Join(CommandContext context, string[] args)
     {
@@ -124,6 +211,8 @@ public static class Commands
             case ParamType.query:
                 var result = await MusicFetchHelper.Search(combinedArgs);
                 /// TODO: for now only use the top result
+                if (result.Count == 0)
+                    await context.Channel.SendMessageAsync(string.Format(Responses.play_SearchEmpty, combinedArgs));
                 videoName = result[0].name;
                 videoID = result[0].id;
                 break;

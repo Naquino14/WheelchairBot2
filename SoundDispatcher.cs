@@ -9,11 +9,11 @@ internal class SoundDispatcher
     internal SoundDispatcher(Dictionary<ulong, GuildAudioContext> audioClients)
     {
         AudioClients = audioClients;
-        CheckThread = new Thread(async () => await CheckSongIsDone());
+        CheckThread = new Thread(async () => await Dispatch());
         CheckThread.Start();
     }
 
-    internal async Task CheckSongIsDone()
+    internal async Task Dispatch()
     {
         for (; ; )
         {
@@ -26,6 +26,7 @@ internal class SoundDispatcher
                         client.IsReady = false;
                     var nextSong = client.Queue.First();
                     client.Queue.RemoveAt(0);
+                    client.NowPlaying = nextSong;
                     if (client.ContextTextChannel is not null)
                         await client.ContextTextChannel.SendMessageAsync($"Now playing: {nextSong.Name}");
                     AudioHelper.SendAudioStream(client.AudioClient, $@"queue\{client.GuildId}\{nextSong.ID}.m4a", client);

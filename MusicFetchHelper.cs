@@ -69,7 +69,7 @@ internal static class MusicFetchHelper
         string videoReName = Path.Combine(destination, $"{id}.m4a");
 
         if (!File.Exists(videoReName))
-            File.Move(@$"{destination}\{videoName}.m4a", videoReName);
+            File.Copy(@$"{destination}\{videoName}.m4a", videoReName);
 
         File.Delete($@"{destination}\{videoName}.m4a");
 
