@@ -268,6 +268,24 @@ namespace WheelchairBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to restart your brain bruh im not in a channel.
+        /// </summary>
+        internal static string restart_NoContext {
+            get {
+                return ResourceManager.GetString("restart_NoContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string restart_UserNotInChannel {
+            get {
+                return ResourceManager.GetString("restart_UserNotInChannel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hey buckaroo, add me to a call and queue something, THEN I CAN SKIP IDIOT.
         /// </summary>
         internal static string skip_NoContext {

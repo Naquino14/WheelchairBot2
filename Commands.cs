@@ -257,6 +257,40 @@ public static class Commands
             guildAudioContext.IsReady = true;
     }
 
+    public static async Task Restart(CommandContext context, string[] args)
+    {
+        // check if context exists
+        if (!audioClients.ContainsKey(context.Guild.Id))
+        {
+            await context.Message.ReplyAsync(Responses.skip_NoContext);
+            return;
+        }
+        var audioClient = audioClients[context.Guild.Id];
+
+        // check if user is in channel
+        var channel = (context.User as IGuildUser)?.VoiceChannel;
+        if (channel is null)
+        {
+            await context.Message.ReplyAsync(Responses.remove_UserNotInChannel);
+            return;
+        }
+
+        // check if something is playing
+        if (!audioClient.IsPlaying)
+        {
+            await context.Message.ReplyAsync(Responses.skip_NothingPlaying);
+            return;
+        }
+
+        // add now playing to the beginning of the queue
+        audioClient.Queue.Insert(0, audioClient.NowPlaying!);
+
+        // stop streaming thread
+        audioClient.StreamingThreadCancellationToken?.Cancel();
+
+        await context.Message.ReplyAsync($"Restarted {audioClient.NowPlaying!.Name}");
+    }
+
     public static async Task Skip(CommandContext context, string[] args)
     {
         // check if context exists
@@ -285,9 +319,6 @@ public static class Commands
         // stop streaming thread
         var nowPlaying = audioClient.NowPlaying;
         audioClient.StreamingThreadCancellationToken?.Cancel();
-
-        while (audioClient.IsPlaying)
-            await Task.Delay(100);
 
         await context.Message.ReplyAsync($"Skipped {nowPlaying!.Name}");
     }

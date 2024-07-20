@@ -186,6 +186,12 @@
   <data name="remove_UserNotInChannel" xml:space="preserve">
     <value>PARTY POOPER ALERT</value>
   </data>
+  <data name="restart_NoContext" xml:space="preserve">
+    <value>restart your brain bruh im not in a channel</value>
+  </data>
+  <data name="restart_UserNotInChannel" xml:space="preserve">
+    <value />
+  </data>
   <data name="skip_NoContext" xml:space="preserve">
     <value>Hey buckaroo, add me to a call and queue something, THEN I CAN SKIP IDIOT</value>
   </data>
