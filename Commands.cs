@@ -11,7 +11,6 @@ public static class Commands
 
     private static readonly ulong JOE_ID = 879175038874554379ul;
     private static readonly int JOIN_LEAVE_TIMEOUT_MS = 8000;
-    private static readonly int DOWNLOAD_TIMEOUT_MS = 10000;
 
     private static SoundDispatcher SoundDispatcher { get; set; }
 
@@ -82,10 +81,9 @@ public static class Commands
             return;
         }
         var audioClient = audioClients[context.Guild.Id];
+        
         // check if user is in channel
         var channel = (context.User as IGuildUser)?.VoiceChannel;
-
-        // check if user is in channel
         if (channel is null)
         {
             await context.Message.ReplyAsync(Responses.remove_UserNotInChannel);
@@ -257,14 +255,41 @@ public static class Commands
 
         if (!guildAudioContext.IsReady)
             guildAudioContext.IsReady = true;
+    }
 
-        //if (guildAudioContext.Queue.Count == 0)
-        //{
-        //    var firstSong = guildAudioContext.Queue.First();
-        //    guildAudioContext.Queue.RemoveAt(0);
-        //    await context.Channel.SendMessageAsync($"Now playing: {firstSong.Name}");
-        //    AudioHelper.SendAudioStream(guildAudioContext.AudioClient, @$"queue\{guildAudioContext.GuildId}\{firstSong.ID}.m4a", guildAudioContext);
-        //}
+    public static async Task Skip(CommandContext context, string[] args)
+    {
+        // check if context exists
+        if (!audioClients.ContainsKey(context.Guild.Id))
+        {
+            await context.Message.ReplyAsync(Responses.skip_NoContext);
+            return;
+        }
+        var audioClient = audioClients[context.Guild.Id];
+
+        // check if user is in channel
+        var channel = (context.User as IGuildUser)?.VoiceChannel;
+        if (channel is null)
+        {
+            await context.Message.ReplyAsync(Responses.remove_UserNotInChannel);
+            return;
+        }
+
+        // check if something is playing
+        if (!audioClient.IsPlaying)
+        {
+            await context.Message.ReplyAsync(Responses.skip_NothingPlaying);
+            return;
+        }
+
+        // stop streaming thread
+        var nowPlaying = audioClient.NowPlaying;
+        audioClient.StreamingThreadCancellationToken?.Cancel();
+
+        while (audioClient.IsPlaying)
+            await Task.Delay(100);
+
+        await context.Message.ReplyAsync($"Skipped {nowPlaying!.Name}");
     }
 
     #region Private Helpers

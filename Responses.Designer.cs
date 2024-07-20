@@ -266,5 +266,23 @@ namespace WheelchairBot {
                 return ResourceManager.GetString("remove_UserNotInChannel", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hey buckaroo, add me to a call and queue something, THEN I CAN SKIP IDIOT.
+        /// </summary>
+        internal static string skip_NoContext {
+            get {
+                return ResourceManager.GetString("skip_NoContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to uhhh nothing is playing son.
+        /// </summary>
+        internal static string skip_NothingPlaying {
+            get {
+                return ResourceManager.GetString("skip_NothingPlaying", resourceCulture);
+            }
+        }
     }
 }

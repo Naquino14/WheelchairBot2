@@ -7,15 +7,15 @@ namespace WheelchairBot;
 internal class GuildAudioContext
 {
     internal GuildAudioContext(
-            ulong guildId, 
-            IAudioClient audioClient, 
-            IVoiceChannel connectedChannel, 
-            IMessageChannel? textChannel = null, 
-            Thread? streamingThread = null, 
-            List<VideoInfo> queue = null!, 
+            ulong guildId,
+            IAudioClient audioClient,
+            IVoiceChannel connectedChannel,
+            IMessageChannel? textChannel = null,
+            Thread? streamingThread = null,
+            List<VideoInfo> queue = null!,
             VideoInfo? nowPlaying = null,
-            bool isConnected = false, bool 
-            isPlaying = false, 
+            bool isConnected = false, bool
+            isPlaying = false,
             bool isReady = false
         )
     {
@@ -40,6 +40,7 @@ internal class GuildAudioContext
     internal bool IsConnected { get; set; }
     internal bool IsPlaying { get; set; }
     internal bool IsReady { get; set; }
+    internal CancellationTokenSource? StreamingThreadCancellationToken { get; set; }
 }
 
 internal class VideoInfo

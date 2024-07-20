@@ -22,18 +22,23 @@ internal class AudioHelper
             using var ffmpeg = CreateAudioProcess(path);
             using var output = (ffmpeg ?? throw new NullReferenceException("Could not spawn ffmpeg process")).StandardOutput.BaseStream;
             using var discord = client.CreatePCMStream(AudioApplication.Mixed);
+            audioContext.IsPlaying = true;
+            audioContext.StreamingThreadCancellationToken = new();
+
             try
             {
-                audioContext.IsPlaying = true;
-                await output.CopyToAsync(discord);
-
-                // wait for song duration
-                await Task.Delay(duration);
-                audioContext.IsPlaying = false;
-            }
+                await output.CopyToAsync(discord, audioContext.StreamingThreadCancellationToken.Token);
+            } 
+            catch (OperationCanceledException)
+            {
+                Console.WriteLine("Audio stream cancelled.");
+            } 
             catch (Exception e)
             {
                 Console.WriteLine($"Exception occured when sending audio stream to discord: {e.Message}");
+            } finally
+            {
+                audioContext.IsPlaying = false;
             }
         });
         audioContext.StreamingThread.Start();

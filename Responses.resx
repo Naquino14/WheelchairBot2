@@ -186,4 +186,10 @@
   <data name="remove_UserNotInChannel" xml:space="preserve">
     <value>PARTY POOPER ALERT</value>
   </data>
+  <data name="skip_NoContext" xml:space="preserve">
+    <value>Hey buckaroo, add me to a call and queue something, THEN I CAN SKIP IDIOT</value>
+  </data>
+  <data name="skip_NothingPlaying" xml:space="preserve">
+    <value>uhhh nothing is playing son</value>
+  </data>
 </root>
