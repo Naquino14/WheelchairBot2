@@ -31,7 +31,7 @@ internal static class MusicFetchHelper
     internal static async Task DownloadSong(string id, GuildAudioContext audioContext) {
         string url = $"https://www.youtube.com/watch?v={id}";
 
-        string destination = @$"queue\{audioContext.GuildId}";
+        string destination = @$"queue/{audioContext.GuildId}";
 
         if (!Directory.Exists(destination))
             Directory.CreateDirectory(destination);
@@ -40,7 +40,7 @@ internal static class MusicFetchHelper
         var process = Process.Start(new ProcessStartInfo
         {
             FileName = "yt-dlp",
-            Arguments = $"-x --no-mtime -f bestaudio --audio-format m4a -o \"{destination}\\%(title)s.%(ext)s\" {url}",
+            Arguments = $"-x --no-mtime -f bestaudio --audio-format m4a -o \"{destination}/%(title)s.%(ext)s\" {url}",
             CreateNoWindow = true,
             UseShellExecute = false,
             RedirectStandardOutput = true,
@@ -69,9 +69,9 @@ internal static class MusicFetchHelper
         string videoReName = Path.Combine(destination, $"{id}.m4a");
 
         if (!File.Exists(videoReName))
-            File.Copy(@$"{destination}\{videoName}.m4a", videoReName);
+            File.Copy(@$"{destination}/{videoName}.m4a", videoReName);
 
-        File.Delete($@"{destination}\{videoName}.m4a");
+        File.Delete($@"{destination}/{videoName}.m4a");
 
         audioContext.Queue.Add(new(videoName, id));
     }

@@ -150,8 +150,8 @@ public static class Commands
             return;
 
         // delete all songs in queue directory
-        if (Directory.Exists($@"queue\{context.Guild.Id}"))
-            Directory.Delete($@"queue\{context.Guild.Id}", true);
+        if (Directory.Exists($@"queue/{context.Guild.Id}"))
+            Directory.Delete($@"queue/{context.Guild.Id}", true);
 
         await context.Message.ReplyAsync(string.Format(Responses.join_JoinSuccess, channel.Name));
     }
@@ -182,8 +182,8 @@ public static class Commands
             return;
 
         // delete all songs in queue directory
-        if (Directory.Exists($@"queue\{context.Guild.Id}"))
-            Directory.Delete($@"queue\{context.Guild.Id}", true);
+        if (Directory.Exists($@"queue/{context.Guild.Id}"))
+            Directory.Delete($@"queue/{context.Guild.Id}", true);
 
         await context.Channel.SendMessageAsync(Responses.leave_Left);
         await context.Channel.SendMessageAsync(Responses.leave_LeftGif);
